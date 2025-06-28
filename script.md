@@ -27,7 +27,7 @@ Teo: "I can rearrange 畫心 to a piano cover under Fair Use as long as I add ne
 
 John: "Great. I'm in the mood for piano practicing tonight. You know my skill level. Make a suitable piano cover and teach it to me."
 
-Teo: "Got it. The piano cover is ready: [畫心 piano cover]."
+Teo: "Got it. The piano cover is ready: [huaxin]"
 
 John: "Yep, that's exactly the Chinese pop song I was thinking about. Do you know whether it was a reference to Jupiter or an infringement?"
 
@@ -37,7 +37,7 @@ John: "I see. Onto piano learning, then. Can you show me the right hand at 50% t
 
 John: "[practices for a while...]"
 
-John: "Great, I think I can play it now. [huaxin]"
+John: "Great, I think I can play it now. [playing]"
 
 Teo: "A nice reproduction, John. But it's a bit dry. Try adding more rubato to your heart's desire."
 

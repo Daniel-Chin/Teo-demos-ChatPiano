@@ -258,12 +258,14 @@ source = { virtual = "." }
 dependencies = [
     { name = "dotenv" },
     { name = "openai" },
+    { name = "tqdm" },
 ]
 
 [package.metadata]
 requires-dist = [
     { name = "dotenv", specifier = ">=0.9.9" },
     { name = "openai", specifier = ">=1.92.3" },
+    { name = "tqdm", specifier = ">=4.67.1" },
 ]
 
 [[package]]

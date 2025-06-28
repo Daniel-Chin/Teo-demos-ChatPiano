@@ -1,5 +1,6 @@
 import os
 from pathlib import Path
+from hashlib import md5
 
 from dotenv import load_dotenv
 from openai import OpenAI
@@ -19,7 +20,7 @@ Word Choice: Evokes metaphor and synesthesia, using terms like color, texture, g
 
 SPEECH_DIR = Path('./speech/')
 
-load_dotenv('~/secrets/openai_api.env')
+assert load_dotenv(os.path.expanduser('~/secrets/openai_api.env'))
 api_key = os.getenv("OPENAI_API_KEY")
 assert api_key is not None
 
@@ -35,3 +36,8 @@ def render(text: str, filename: str) -> None:
         instructions=PROMPT,
     ) as response:
         response.stream_to_file(filename)
+
+def filenameViaHash(speech: str) -> str:
+    s = repr([VOICE, PROMPT, speech])
+    uuid = md5(s.encode('utf-8')).hexdigest()
+    return os.path.join(SPEECH_DIR, f'{uuid}.mp3')
