@@ -43,7 +43,9 @@ def ScriptIter():
                             yield Line(subject, speech, None)
                         break
                     else:
-                        yield Line(subject, speech.strip(), None)
+                        speech = speech.strip()
+                        if speech:
+                            yield Line(subject, speech, None)
                         action, speech_action = more.split(']', 1)
                         yield Line(subject, None, action.strip())
                         speech_action = speech_action.strip()

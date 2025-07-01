@@ -1,15 +1,17 @@
+import os
 import typing as tp
 from subprocess import Popen, DEVNULL
 from contextlib import contextmanager
 
 import mido
-import mido.backends
+
+import playMidi
 
 from script_iter import ScriptIter, Line
 from t2s import filenameViaHash
 
-SPEECH = (0, 0)
-MUSIC_AUDIO = (0, 0)
+SPEECH = (0, 0, 'alsa_output.usb-BEHRINGER_UMC404HD_192k-00.HiFi__Line1__sink')
+MUSIC_AUDIO = (0, 0, 'alsa_output.pci-0000_00_1f.3.analog-stereo')
 
 def Collate():
     buf: tp.List[Line] = []
@@ -21,14 +23,16 @@ def Collate():
     if buf:
         yield buf
 
-def playAudio(filename: str, card_i: int, device_i: int):
+def playAudio(filename: str, card_i: int, device_i: int, sink: str):
+    env = os.environ.copy()
+    env['PULSE_SINK'] = sink
     with Popen(
         [
             'ffplay', '-nodisp', '-autoexit', 
-            '-ao', f'alsa:device=hw={card_i},{device_i}',
+            # '-ao', f'alsa:device=hw={card_i},{device_i}',
             filename, 
         ], 
-        stdout=DEVNULL, stderr=DEVNULL, 
+        stdout=DEVNULL, stderr=DEVNULL, env=env, 
     ) as proc:
         proc.wait()
 
@@ -50,29 +54,37 @@ def MidoContext():
         yield playMidi
 
 def main():
-    with MidoContext() as playMidi:
-        for lines in Collate():
-            for line in lines:
-                print(line)
-            for line in lines:
-                if line.subject != 'Teo':
-                    input('Press Enter to continue...')
-                    continue
-                if line.speech is not None:
-                    filename = filenameViaHash(line.speech)
-                    playAudio(filename, *SPEECH)
-                    continue
-                assert line.action is not None
-                if line.action == 'mars':
-                    playAudio('./music/mars.wav', *MUSIC_AUDIO)
-                elif line.action == 'neptune':
-                    playAudio('./music/neptune.wav', *MUSIC_AUDIO)
-                elif line.action == 'jupiter':
-                    playAudio('./music/jupiter.wav', *MUSIC_AUDIO)
-                elif line.action == 'huaxin':
-                    playMidi('./music/huaxin.mid')
-                else:
-                    raise ValueError(f'unknown {line.action = }')
+    output_name = playMidi.askOutput()
+    for lines in Collate():
+        for line in lines:
+            print(line)
+        for line in lines:
+            if line.subject != 'Teo':
+                input('Press Enter to continue...')
+                continue
+            if line.speech is not None:
+                filename = filenameViaHash(line.speech)
+                playAudio(filename, *SPEECH)
+                continue
+            assert line.action is not None
+            if line.action == 'mars':
+                playAudio('./music/mars.wav', *MUSIC_AUDIO)
+            elif line.action == 'neptune':
+                playAudio('./music/neptune.wav', *MUSIC_AUDIO)
+            elif line.action == 'jupiter':
+                playAudio('./music/jupiter.wav', *MUSIC_AUDIO)
+            elif line.action == 'huaxin':
+                playMidi.main(
+                    './music/huaxin.mid', 
+                    output_name, scale_velocity=0.5, 
+                )
+            elif line.action == 'huaxin_simple':
+                playMidi.main(
+                    './music/huaxin_simple.mid', 
+                    output_name, scale_velocity=0.5, 
+                )
+            else:
+                raise ValueError(f'unknown {line.action = }')
 
 if __name__ == '__main__':
     main()

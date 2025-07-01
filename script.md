@@ -31,9 +31,11 @@ Teo: "Got it. The piano cover is ready: [huaxin]"
 
 John: "Yep, that's exactly the Chinese pop song I was thinking about. Do you know whether it was a reference to Jupiter or an infringement?"
 
-Teo: "From what I can see, the melody lines differ after the first three notes. The commonality between Jupiter and 畫心, on its own, is not musically signifying enough for it to point to any specific piece. I’d say 畫心 probably came up with it in parallel."
+Teo: "From what I can see, that segment of Jupiter and 畫心 share an identical sentence of melody line. Still, they contextualize that material so differently that the effects produced are totally different. I believe they are independent works aiming at distinct goals."
 
-John: "I see. Onto piano learning, then. Can you show me the right hand at 50% tempo?"
+John: "I see. Onto piano learning, then. Can you show me the right hand at 80% tempo? Also transpose it to the white keys."
+
+Teo: "[huaxin_simple]"
 
 John: "[practices for a while...]"
 
