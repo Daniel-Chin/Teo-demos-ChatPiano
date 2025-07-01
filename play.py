@@ -23,6 +23,11 @@ def Collate():
     if buf:
         yield buf
 
+def remapVelocity(x: int):
+    if x == 0:
+        return 0
+    return max(0, min(127, round((x - 40) * 1.5)))
+
 def playAudio(filename: str, card_i: int, device_i: int, sink: str):
     env = os.environ.copy()
     env['PULSE_SINK'] = sink
@@ -76,12 +81,12 @@ def main():
             elif line.action == 'huaxin':
                 playMidi.main(
                     './music/huaxin.mid', 
-                    output_name, scale_velocity=0.5, 
+                    output_name, velocity_remap=remapVelocity,
                 )
             elif line.action == 'huaxin_simple':
                 playMidi.main(
                     './music/huaxin_simple.mid', 
-                    output_name, scale_velocity=0.5, 
+                    output_name, velocity_remap=remapVelocity,
                 )
             else:
                 raise ValueError(f'unknown {line.action = }')
