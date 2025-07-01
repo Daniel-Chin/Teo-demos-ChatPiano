@@ -10,7 +10,7 @@ class Line:
 
     def __post_init__(self):
         assert (self.speech is None) != (self.action is None)
-        assert self.subject in ('Teo', 'John')
+        assert self.subject in ('Teo', 'Dan')
     
     def __repr__(self):
         if self.speech is not None:
@@ -31,7 +31,7 @@ def ScriptIter():
             left, right = line.split(':', 1)
             subject = left.strip()
             speech_action = right.strip().strip('"')
-            if subject == 'John':
+            if subject == 'Dan':
                 yield Line(subject, speech_action, None)
             else:
                 while True:
