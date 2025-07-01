@@ -6,6 +6,7 @@ from contextlib import contextmanager
 import mido
 
 import playMidi
+from pulse_audio_temp_default import PulseAudioTempDefault
 
 from script_iter import ScriptIter, Line
 from t2s import filenameViaHash
@@ -29,17 +30,16 @@ def remapVelocity(x: int):
     return max(0, min(127, round((x - 40) * 1.5)))
 
 def playAudio(filename: str, card_i: int, device_i: int, sink: str):
-    env = os.environ.copy()
-    env['PULSE_SINK'] = sink
-    with Popen(
-        [
-            'ffplay', '-nodisp', '-autoexit', 
-            # '-ao', f'alsa:device=hw={card_i},{device_i}',
-            filename, 
-        ], 
-        stdout=DEVNULL, stderr=DEVNULL, env=env, 
-    ) as proc:
-        proc.wait()
+    with PulseAudioTempDefault(sink):
+        with Popen(
+            [
+                'ffplay', '-nodisp', '-autoexit', 
+                # '-ao', f'alsa:device=hw={card_i},{device_i}',
+                filename, 
+            ], 
+            stdout=DEVNULL, stderr=DEVNULL, 
+        ) as proc:
+            proc.wait()
 
 @contextmanager
 def MidoContext():
@@ -78,15 +78,17 @@ def main():
                 playAudio('./music/neptune.wav', *MUSIC_AUDIO)
             elif line.action == 'jupiter':
                 playAudio('./music/jupiter.wav', *MUSIC_AUDIO)
-            elif line.action == 'huaxin':
+            elif line.action == 'hua_xin':
                 playMidi.main(
-                    './music/huaxin.mid', 
+                    './music/hua_xin.mid', 
                     output_name, velocity_remap=remapVelocity,
+                    verbose=False,
                 )
-            elif line.action == 'huaxin_simple':
+            elif line.action == 'hua_xin-simple':
                 playMidi.main(
-                    './music/huaxin_simple.mid', 
+                    './music/hua_xin-simple.mid', 
                     output_name, velocity_remap=remapVelocity,
+                    verbose=False,
                 )
             else:
                 raise ValueError(f'unknown {line.action = }')
